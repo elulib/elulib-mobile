@@ -95,9 +95,3 @@ release/
 *.temp
 *.bak
 *.cache
-
-# Package manager locks (keep Cargo.lock for binaries, ignore others)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
