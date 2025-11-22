@@ -1,6 +1,10 @@
 [package]
-name = "elulib_mobile"
+name = "elulib-mobile"
 version = "0.1.0"
+description = "Application mobile élulib"
+authors = ["élulib"]
+license = ""
+repository = "https://github.com/elulib/desktop-app"
 edition = "2021"
 
 [lib]

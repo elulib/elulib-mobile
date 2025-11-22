@@ -32,7 +32,7 @@
 		2B90C8CDF75980A7381CCEAB /* bindings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bindings.h; sourceTree = "<group>"; };
 		2E356A0963CFBE08D6A9AA9D /* élulib.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "élulib.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E51621EA669032463C2B289 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
-		4BCDE2A688CEA28ECA1B8D10 /* elulib_mobile_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = elulib_mobile_iOS.entitlements; sourceTree = "<group>"; };
+		4BCDE2A688CEA28ECA1B8D10 /* elulib-mobile_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = elulib-mobile_iOS.entitlements; sourceTree = "<group>"; };
 		4F85FCEBBF014F2255A5574B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5B94FB524E8465040966DDE6 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		806A31A5572BF26A9118DDE3 /* libapp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libapp.a; sourceTree = "<group>"; };
@@ -66,7 +66,7 @@
 				0BE022DE3F73C0EC37830B47 /* assets */,
 				091EECB635DFAA22D1206538 /* Assets.xcassets */,
 				4F85FCEBBF014F2255A5574B /* LaunchScreen.storyboard */,
-				E39591BA9A6E4F5C3E893E3C /* elulib_mobile_iOS */,
+				E39591BA9A6E4F5C3E893E3C /* elulib-mobile_iOS */,
 				999C3C9792E715D6D2A74134 /* Externals */,
 				CC8FE8919F4EF313E467BD14 /* Sources */,
 				E4178180073D00CABBA9B626 /* src */,
@@ -130,13 +130,13 @@
 			path = elulib_mobile;
 			sourceTree = "<group>";
 		};
-		E39591BA9A6E4F5C3E893E3C /* elulib_mobile_iOS */ = {
+		E39591BA9A6E4F5C3E893E3C /* elulib-mobile_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				4BCDE2A688CEA28ECA1B8D10 /* elulib_mobile_iOS.entitlements */,
+				4BCDE2A688CEA28ECA1B8D10 /* elulib-mobile_iOS.entitlements */,
 				C435983246103D7BBFB4347B /* Info.plist */,
 			);
-			path = elulib_mobile_iOS;
+			path = elulib-mobile_iOS;
 			sourceTree = "<group>";
 		};
 		E4178180073D00CABBA9B626 /* src */ = {
@@ -151,9 +151,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5B662BF749667F3CEBFECCC0 /* elulib_mobile_iOS */ = {
+		5B662BF749667F3CEBFECCC0 /* elulib-mobile_iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E1F8E6926053274375B51AA4 /* Build configuration list for PBXNativeTarget "elulib_mobile_iOS" */;
+			buildConfigurationList = E1F8E6926053274375B51AA4 /* Build configuration list for PBXNativeTarget "elulib-mobile_iOS" */;
 			buildPhases = (
 				24F91151C56D6BFDACE693D8 /* Build Rust Code */,
 				63B5F8B27BBFF5FA43D94919 /* Sources */,
@@ -164,10 +164,10 @@
 			);
 			dependencies = (
 			);
-			name = elulib_mobile_iOS;
+			name = elulib-mobile_iOS;
 			packageProductDependencies = (
 			);
-			productName = elulib_mobile_iOS;
+			productName = elulib-mobile_iOS;
 			productReference = 2E356A0963CFBE08D6A9AA9D /* élulib.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -193,7 +193,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5B662BF749667F3CEBFECCC0 /* elulib_mobile_iOS */,
+				5B662BF749667F3CEBFECCC0 /* elulib-mobile_iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -251,7 +251,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = elulib_mobile_iOS/elulib_mobile_iOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = elulib-mobile_iOS/elulib-mobile_iOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
@@ -259,7 +259,7 @@
 					"$(inherited)",
 					"\".\"",
 				);
-				INFOPLIST_FILE = elulib_mobile_iOS/Info.plist;
+				INFOPLIST_FILE = elulib-mobile_iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "élulib";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -292,7 +292,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = elulib_mobile_iOS/elulib_mobile_iOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = elulib-mobile_iOS/elulib-mobile_iOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
@@ -300,7 +300,7 @@
 					"$(inherited)",
 					"\".\"",
 				);
-				INFOPLIST_FILE = elulib_mobile_iOS/Info.plist;
+				INFOPLIST_FILE = elulib-mobile_iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "élulib";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -464,7 +464,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = debug;
 		};
-		E1F8E6926053274375B51AA4 /* Build configuration list for PBXNativeTarget "elulib_mobile_iOS" */ = {
+		E1F8E6926053274375B51AA4 /* Build configuration list for PBXNativeTarget "elulib-mobile_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A5DB41FDB523174270F7BD98 /* debug */,
