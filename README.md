@@ -22,6 +22,8 @@ rustup target add aarch64-apple-ios aarch64-apple-ios-sim
 
 #### iOS Setup
 
+Require Xcode 17.0 or higher.
+
 ```bash
 # Install CocoaPods
 sudo gem install cocoapods
