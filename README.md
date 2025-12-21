@@ -2,8 +2,6 @@
 
 ## Installation
 
-### Local
-
 Clone repository and install dependencies:
 
 ```bash
@@ -18,7 +16,15 @@ rustup default stable
 rustup target add aarch64-apple-ios aarch64-apple-ios-sim
 ```
 
-#### iOS Setup
+> [!NOTE]
+> You might need to set these environment variables to build and run the app:
+> ```bash
+> export RUST_TOOLCHAIN_NAME="stable-aarch64-apple-darwin"
+> export HOMEBREW_PREFIX="/opt/homebrew"
+> export RUSTUP_HOME="$HOME/.rustup"
+> ```
+
+### iOS Setup
 
 Require Xcode 17.0 or higher.
 
@@ -33,20 +39,39 @@ sudo xcodebuild -license accept
 npx tauri ios init
 ```
 
-Run the app:
+Run the development app:
 ```bash
 npm run dev:ios
 ```
 
-Generate icons:
-```bash
-chmod +x src-tauri/icons/generate-ios-icons.sh
-```
+### Android Setup
 
-### Building
+>[!IMPORTANT]
+> Android build is not supported yet. This section is placeholder for future support.
 
-#### iOS
+Require Android Studio 2024.3 or higher.
 
 ```bash
-npm run dev:ios
+# Install Android Studio
+brew install android-studio
+
+# Open Android Studio
+android-studio
 ```
+
+Run the development app:
+```bash
+npm run dev:android
+```
+
+## Building
+
+- Build the iOS app:
+    ```bash
+    npm run build:ios
+    ```
+
+- Build the Android app:
+    ```bash
+    npm run build:android
+    ```
