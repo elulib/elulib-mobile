@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "tauri": "tauri",
-    "dev:ios": "tauri ios dev",
-    "dev:android": "tauri android dev",
-    "build:ios": "tauri ios build",
-    "build:android": "tauri android build"
+    "sync-version": "node scripts/sync-version.js",
+    "dev:ios": "npm run sync-version && tauri ios dev",
+    "dev:android": "npm run sync-version && tauri android dev",
+    "build:ios": "npm run sync-version && tauri ios build",
+    "build:android": "npm run sync-version && tauri android build"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.9.4"
