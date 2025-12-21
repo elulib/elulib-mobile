@@ -1,0 +1,167 @@
+name: Release Build
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (optional, uses release tag if not provided)'
+        required: false
+
+jobs:
+  build-ios:
+    name: Build iOS Release
+    runs-on: macos-14  # macOS 14 (Sonoma) supports Xcode 15+
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup CocoaPods
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: false
+
+      - name: Install CocoaPods
+        run: |
+          gem install cocoapods
+          pod --version
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.4'  # Latest stable Xcode 15.x
+
+      - name: Accept Xcode license
+        run: sudo xcodebuild -license accept
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            src-tauri/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install CocoaPods dependencies
+        working-directory: src-tauri/gen/apple
+        run: pod install
+
+      - name: Build iOS app
+        # Note: For App Store distribution, code signing is required.
+        # Configure these secrets in GitHub repository settings:
+        # - APPLE_ID: Your Apple ID email
+        # - APPLE_ID_PASS: App-specific password (not your regular password)
+        # - APPLE_TEAM_ID: Your Apple Developer Team ID
+        # - APPLE_CERTIFICATE: Base64-encoded .p12 certificate
+        # - APPLE_CERTIFICATE_PASSWORD: Password for the certificate
+        # - APPLE_PROVISIONING_PROFILE: Base64-encoded provisioning profile
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+        run: npm run build:ios
+
+      - name: Find build artifacts
+        id: find-artifacts
+        run: |
+          # Find the .ipa file
+          IPA_FILE=$(find . -name "*.ipa" -type f | head -n 1)
+          if [ -z "$IPA_FILE" ]; then
+            echo "No .ipa file found"
+            exit 1
+          fi
+          echo "ipa_path=$IPA_FILE" >> $GITHUB_OUTPUT
+          echo "Found IPA: $IPA_FILE"
+
+      - name: Upload iOS build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release-build
+          path: ${{ steps.find-artifacts.outputs.ipa_path }}
+          retention-days: 30
+
+      - name: Get release tag
+        id: get-tag
+        if: github.event_name == 'release'
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "Release tag: $TAG_NAME"
+
+      - name: Create Release Asset (if release)
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.find-artifacts.outputs.ipa_path }}
+          tag_name: ${{ steps.get-tag.outputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to App Store Connect
+        if: github.event_name == 'release'
+        # This step uploads the IPA to App Store Connect for TestFlight/App Store distribution
+        # Required secrets (configure in GitHub repository settings):
+        # - APP_STORE_API_KEY_ID: Your App Store Connect API Key ID (found in App Store Connect -> Users and Access -> Keys)
+        # - APP_STORE_API_ISSUER: Your App Store Connect API Issuer ID (found in same location)
+        # - APP_STORE_API_KEY: The contents of your .p8 API key file (the raw file content, not base64)
+        env:
+          APP_STORE_API_KEY_ID: ${{ secrets.APP_STORE_API_KEY_ID }}
+          APP_STORE_API_ISSUER: ${{ secrets.APP_STORE_API_ISSUER }}
+          APP_STORE_API_KEY: ${{ secrets.APP_STORE_API_KEY }}
+        run: |
+          # Check if required secrets are set
+          if [ -z "$APP_STORE_API_KEY_ID" ] || [ -z "$APP_STORE_API_ISSUER" ] || [ -z "$APP_STORE_API_KEY" ]; then
+            echo "App Store Connect API secrets not configured. Skipping upload."
+            echo "To enable App Store upload, configure these secrets in GitHub repository settings:"
+            echo "- APP_STORE_API_KEY_ID"
+            echo "- APP_STORE_API_ISSUER"
+            echo "- APP_STORE_API_KEY"
+            exit 0
+          fi
+          
+          # Create directory for API key
+          mkdir -p ~/private_keys
+          
+          # Write API key file (the key ID should match the filename pattern: AuthKey_<KEY_ID>.p8)
+          echo "$APP_STORE_API_KEY" > ~/private_keys/AuthKey_${APP_STORE_API_KEY_ID}.p8
+          chmod 600 ~/private_keys/AuthKey_${APP_STORE_API_KEY_ID}.p8
+          
+          echo "Uploading IPA to App Store Connect..."
+          echo "IPA: ${{ steps.find-artifacts.outputs.ipa_path }}"
+          
+          # Upload to App Store Connect using xcrun altool
+          # This uploads to TestFlight for testing, or prepares for App Store submission
+          xcrun altool --upload-app \
+            --type ios \
+            --file "${{ steps.find-artifacts.outputs.ipa_path }}" \
+            --apiKey "$APP_STORE_API_KEY_ID" \
+            --apiIssuer "$APP_STORE_API_ISSUER" \
+            --verbose
+          
+          echo "Successfully uploaded to App Store Connect!"
+          echo "You can now submit the build for review in App Store Connect."
