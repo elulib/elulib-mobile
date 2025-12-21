@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "2610"
+   LastUpgradeVersion = "1430"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5B662BF749667F3CEBFECCC0"
+               BlueprintIdentifier = "CBD4EAD9C04F9A21D109E41A"
                BuildableName = "e&#x301;lulib.app"
-               BlueprintName = "elulib_mobile_iOS"
-               ReferencedContainer = "container:elulib_mobile.xcodeproj">
+               BlueprintName = "elulib-mobile_iOS"
+               ReferencedContainer = "container:elulib-mobile.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -30,10 +30,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B662BF749667F3CEBFECCC0"
+            BlueprintIdentifier = "CBD4EAD9C04F9A21D109E41A"
             BuildableName = "e&#x301;lulib.app"
-            BlueprintName = "elulib_mobile_iOS"
-            ReferencedContainer = "container:elulib_mobile.xcodeproj">
+            BlueprintName = "elulib-mobile_iOS"
+            ReferencedContainer = "container:elulib-mobile.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <EnvironmentVariables>
@@ -65,10 +65,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B662BF749667F3CEBFECCC0"
+            BlueprintIdentifier = "CBD4EAD9C04F9A21D109E41A"
             BuildableName = "e&#x301;lulib.app"
-            BlueprintName = "elulib_mobile_iOS"
-            ReferencedContainer = "container:elulib_mobile.xcodeproj">
+            BlueprintName = "elulib-mobile_iOS"
+            ReferencedContainer = "container:elulib-mobile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -94,24 +94,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B662BF749667F3CEBFECCC0"
+            BlueprintIdentifier = "CBD4EAD9C04F9A21D109E41A"
             BuildableName = "e&#x301;lulib.app"
-            BlueprintName = "elulib_mobile_iOS"
-            ReferencedContainer = "container:elulib_mobile.xcodeproj">
+            BlueprintName = "elulib-mobile_iOS"
+            ReferencedContainer = "container:elulib-mobile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "RUST_BACKTRACE"
-            value = "full"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "RUST_LOG"
-            value = "info"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "debug">

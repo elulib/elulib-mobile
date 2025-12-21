@@ -13,10 +13,8 @@ cd elulib-mobile
 # Install Node.js dependencies
 npm install
 
-# Install Rust toolchain (if not already installed)
+# Install Rust toolchain and targets (if not already installed)
 rustup default stable
-
-# Add required Rust targets
 rustup target add aarch64-apple-ios aarch64-apple-ios-sim
 ```
 
@@ -26,8 +24,6 @@ Require Xcode 17.0 or higher.
 
 ```bash
 # Install CocoaPods
-sudo gem install cocoapods
-# or
 brew install cocoapods
 
 # Accept Xcode license

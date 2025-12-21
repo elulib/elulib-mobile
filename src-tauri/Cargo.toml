@@ -3,7 +3,7 @@ name = "elulib-mobile"
 version = "0.1.0"
 description = "Application mobile élulib"
 authors = ["élulib"]
-license = ""
+license = "MIT"
 repository = "https://github.com/elulib/desktop-app"
 edition = "2021"
 
@@ -11,7 +11,9 @@ edition = "2021"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [dependencies]
+# All dependencies are required for Tauri framework
 tauri = { version = "2.1", features = [] }
 
 [build-dependencies]
+# Required for Tauri build-time code generation
 tauri-build = { version = "2.1", features = [] }

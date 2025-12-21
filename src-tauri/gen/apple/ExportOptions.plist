@@ -2,7 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- Use "app-store" for App Store submission, "development" for development, "ad-hoc" for ad-hoc, "enterprise" for enterprise -->
     <key>method</key>
-    <string>debugging</string>
+    <string>app-store</string>
 </dict>
 </plist>

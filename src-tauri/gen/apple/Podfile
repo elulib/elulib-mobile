@@ -1,13 +1,13 @@
 # Uncomment the next line to define a global platform for your project
 
-target 'elulib_mobile_iOS' do
+target 'elulib-mobile_iOS' do
 platform :ios, '14.0'
-  # Pods for elulib_mobile_iOS
+  # Pods for elulib-mobile_iOS
 end
 
-target 'elulib_mobile_macOS' do
+target 'elulib-mobile_macOS' do
 platform :osx, '11.0'
-  # Pods for elulib_mobile_macOS
+  # Pods for elulib-mobile_macOS
 end
 
 # Delete the deployment target for iOS and macOS, causing it to be inherited from the Podfile

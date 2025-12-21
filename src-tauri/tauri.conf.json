@@ -12,19 +12,14 @@
   "app": {
     "withGlobalTauri": false,
     "security": {
-      "csp": null
+      "csp": "default-src 'self' https://app.elulib.com; script-src 'self' https://app.elulib.com; style-src 'self' https://app.elulib.com 'unsafe-inline'; img-src 'self' https://app.elulib.com data:; font-src 'self' https://app.elulib.com data:; connect-src 'self' https://app.elulib.com;"
     },
     "windows": [
       {
         "title": "élulib",
         "url": "https://app.elulib.com",
         "fullscreen": false,
-        "resizable": true,
-        "maximized": false,
-        "visible": true,
-        "decorations": true,
-        "alwaysOnTop": false,
-        "skipTaskbar": false
+        "visible": true
       }
     ]
   },
