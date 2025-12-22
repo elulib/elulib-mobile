@@ -16,6 +16,8 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.9.4"
+  },
+  "dependencies": {
+    "@impierce/tauri-plugin-keystore": "^2.1.0-alpha.1"
   }
 }
-

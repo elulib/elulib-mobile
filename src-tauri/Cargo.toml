@@ -16,6 +16,8 @@ tauri = { version = "2.1", features = [] }
 thiserror = "1.0"
 log = "0.4"
 tauri-plugin-log = "2.1"
+# Keychain/secure storage plugin for iOS Keychain and Android Keystore
+tauri-plugin-keystore = { version = "2.1.0-alpha.1", default-features = false }
 
 [dev-dependencies]
 # Testing dependencies

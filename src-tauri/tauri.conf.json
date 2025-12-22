@@ -12,7 +12,10 @@
   "app": {
     "withGlobalTauri": false,
     "security": {
-      "csp": "default-src 'self' https://app.elulib.com; script-src 'self' https://app.elulib.com; style-src 'self' https://app.elulib.com; img-src 'self' https://app.elulib.com data:; font-src 'self' https://app.elulib.com data:; connect-src 'self' https://app.elulib.com;"
+      "csp": "default-src 'self' https://app.elulib.com; script-src 'self' https://app.elulib.com; style-src 'self' https://app.elulib.com; img-src 'self' https://app.elulib.com data:; font-src 'self' https://app.elulib.com data:; connect-src 'self' https://app.elulib.com;",
+      "capabilities": [
+        "keychain-access"
+      ]
     },
     "windows": [
       {

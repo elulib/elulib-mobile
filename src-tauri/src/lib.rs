@@ -32,6 +32,9 @@ pub enum AppError {
 /// ```
 pub type AppResult<T> = Result<T, AppError>;
 
+/// Application commands module
+pub mod commands;
+
 /// Builds and returns a configured Tauri application builder
 ///
 /// This function creates a Tauri application builder that can be
@@ -47,6 +50,10 @@ pub type AppResult<T> = Result<T, AppError>;
 /// - Standard output (stdout) for console logging
 /// - Log directory for persistent file logging
 /// - Webview console for in-app logging
+///
+/// Secure storage (keychain) is configured via `tauri-plugin-keystore`:
+/// - iOS: Uses Keychain Services for secure data storage
+/// - Android: Uses Android Keystore for secure data storage
 ///
 /// # Returns
 ///
@@ -72,6 +79,7 @@ pub fn create_app() -> tauri::Builder<tauri::Wry> {
                 ])
                 .build(),
         )
+        .plugin(tauri_plugin_keystore::init())
 }
 
 /// Runs the Tauri application
@@ -106,6 +114,12 @@ pub fn run() -> AppResult<()> {
     log::info!("Initializing Tauri application");
     
     create_app()
+        .invoke_handler(tauri::generate_handler![
+            commands::keychain_store,
+            commands::keychain_retrieve,
+            commands::keychain_remove,
+            commands::keychain_exists,
+        ])
         .setup(|_app| {
             log::debug!("Setting up application");
             
