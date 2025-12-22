@@ -163,5 +163,5 @@ jobs:
             --apiIssuer "$APP_STORE_API_ISSUER" \
             --verbose
           
-          echo "Successfully uploaded to App Store Connect!"
-          echo "You can now submit the build for review in App Store Connect."
+          echo "✅ Successfully uploaded to App Store Connect"
+          echo "👉 You can now submit the build for review in App Store Connect"
