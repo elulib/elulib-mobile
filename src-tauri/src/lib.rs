@@ -43,6 +43,11 @@ pub type AppResult<T> = Result<T, AppError>;
 /// - Set up application state
 /// - Configure window properties
 ///
+/// Logging is automatically configured via `tauri-plugin-log` with:
+/// - Standard output (stdout) for console logging
+/// - Log directory for persistent file logging
+/// - Webview console for in-app logging
+///
 /// # Returns
 ///
 /// A `tauri::Builder` instance ready for configuration
@@ -55,7 +60,18 @@ pub type AppResult<T> = Result<T, AppError>;
 /// // Configure the builder as needed
 /// ```
 pub fn create_app() -> tauri::Builder<tauri::Wry> {
+    use tauri_plugin_log::{Target, TargetKind};
+    
     tauri::Builder::default()
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .targets([
+                    Target::new(TargetKind::Stdout),
+                    Target::new(TargetKind::LogDir { file_name: None }),
+                    Target::new(TargetKind::Webview),
+                ])
+                .build(),
+        )
 }
 
 /// Runs the Tauri application
@@ -87,27 +103,39 @@ pub fn create_app() -> tauri::Builder<tauri::Wry> {
 /// ```
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() -> AppResult<()> {
+    log::info!("Initializing Tauri application");
+    
     create_app()
         .setup(|_app| {
+            log::debug!("Setting up application");
+            
             // Application setup logic can go here
             // For example: initialize plugins, setup state, etc.
             #[cfg(debug_assertions)]
             {
+                log::debug!("Debug mode enabled");
                 // Enable devtools in debug mode if needed
-                // app.handle().plugin(tauri_plugin_devtools::init())?;
+                // _app.handle().plugin(tauri_plugin_devtools::init())?;
             }
+            
+            log::info!("Application setup completed successfully");
             Ok(())
         })
         .run(tauri::generate_context!())
-        .map_err(AppError::Tauri)?;
+        .map_err(|e| {
+            log::error!("Tauri runtime error: {}", e);
+            AppError::Tauri(e)
+        })?;
     
+    log::info!("Tauri application started successfully");
     Ok(())
 }
 
 /// Runs the application with error handling and logging
 ///
 /// This is a convenience wrapper around `run()` that handles errors by:
-/// - Printing error messages to stderr
+/// - Logging error messages using the `log` crate
+/// - Printing error messages to stderr (for environments without logger)
 /// - Exiting the process with code 1 on failure
 ///
 /// This function is intended to be called from `main()` as it will terminate
@@ -122,6 +150,9 @@ pub fn run() -> AppResult<()> {
 /// ```
 pub fn run_with_error_handling() {
     if let Err(e) = run() {
+        // Log error using log crate (will work if logger is initialized)
+        log::error!("Failed to run application: {}", e);
+        // Also print to stderr for environments without logger
         eprintln!("Failed to run application: {}", e);
         std::process::exit(1);
     }
