@@ -8,7 +8,11 @@
     "dev:ios": "npm run sync-version && tauri ios dev",
     "dev:android": "npm run sync-version && tauri android dev",
     "build:ios": "npm run sync-version && tauri ios build",
-    "build:android": "npm run sync-version && tauri android build"
+    "build:android": "npm run sync-version && tauri android build",
+    "test": "npm run test:rust",
+    "test:rust": "cd src-tauri && cargo test --test unit_test --test integration_test",
+    "test:rust:unit": "cd src-tauri && cargo test --test unit_test",
+    "test:rust:integration": "cd src-tauri && cargo test --test integration_test"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.9.4"

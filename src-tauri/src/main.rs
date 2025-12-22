@@ -4,5 +4,5 @@
 )]
 
 fn main() {
-    elulib_mobile::run()
+    elulib_mobile::run_with_error_handling()
 }

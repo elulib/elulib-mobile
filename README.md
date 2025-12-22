@@ -26,7 +26,7 @@ rustup target add aarch64-apple-ios aarch64-apple-ios-sim
 
 ### iOS Setup
 
-Require Xcode 17.0 or higher.
+Require Xcode 15.4 or higher.
 
 ```bash
 # Install CocoaPods
@@ -62,6 +62,23 @@ android-studio
 Run the development app:
 ```bash
 npm run dev:android
+```
+
+## Testing
+
+Run all tests:
+```bash
+npm test
+```
+
+Run individual tests:
+```bash
+# Run all tests
+npm run test:rust
+# Run unit tests
+npm run test:rust:unit
+# Run integration tests
+npm run test:rust:integration
 ```
 
 ## Building
