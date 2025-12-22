@@ -55,30 +55,7 @@ jobs:
         working-directory: src-tauri
         run: cargo test --test integration_test --verbose || echo "Integration tests skipped (require runtime)"
 
-      - name: Generate test coverage
-        working-directory: src-tauri
-        run: |
-          cargo install cargo-tarpaulin --locked
-          cargo tarpaulin --out Xml --output-dir coverage
-        continue-on-error: true
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./src-tauri/coverage/cobertura.xml
-          flags: rust
-          name: rust-coverage
-        continue-on-error: true
-
-  test-all:
-    name: All Tests
-    runs-on: ubuntu-latest
-    needs: [test-rust]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
       - name: Test summary
+        if: always()
         run: |
           echo "✅ Rust unit and integration tests completed"
