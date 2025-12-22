@@ -1,5 +1,7 @@
 # elulib-mobile
 
+[![Tests](https://github.com/elulib/elulib-mobile/actions/workflows/tests.yaml/badge.svg)](https://github.com/elulib/elulib-mobile/actions/workflows/tests.yaml)
+
 ## Installation
 
 Clone repository and install dependencies:
