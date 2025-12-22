@@ -117,7 +117,7 @@ fn test_keystore_plugin_multiple_initializations() {
 fn test_app_builder_includes_invoke_handler() {
     // Test that the app builder includes invoke_handler for keychain commands
     // This verifies that commands module is properly integrated
-    let builder = create_app();
+    let _builder = create_app();
     // Builder should include invoke_handler registration
     // If invoke_handler fails to register, builder creation would fail
     // So if we get here, registration was successful
