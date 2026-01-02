@@ -9,6 +9,9 @@
 use tauri::AppHandle;
 use tauri_plugin_keystore::{KeystoreExt, StoreRequest, RetrieveRequest, RemoveRequest};
 
+use crate::constants::helpers;
+use crate::connectivity;
+
 /// Store a value in the keychain
 ///
 /// # Arguments
@@ -24,16 +27,28 @@ use tauri_plugin_keystore::{KeystoreExt, StoreRequest, RetrieveRequest, RemoveRe
 pub async fn keychain_store(app: AppHandle, key: String, value: String) -> Result<(), String> {
     log::info!("Storing value in keychain for key: {}", key);
     
+    // Validate input lengths
+    helpers::validate_keychain_key(&key)
+        .map_err(|e| {
+            log::warn!("Keychain store validation failed for key: {}", e);
+            e
+        })?;
+    helpers::validate_keychain_value(&value)
+        .map_err(|e| {
+            log::warn!("Keychain store validation failed for value: {}", e);
+            e
+        })?;
+    
     // For mobile, StoreRequest only needs the value
     // The key will be used as identifier
     let request = StoreRequest {
-        value: format!("{}:{}", key, value),
+        value: helpers::key_value_pair(&key, &value),
     };
     
     app.keystore().store(request)
         .map_err(|e| {
             log::error!("Failed to store value in keychain: {}", e);
-            format!("Keychain store failed: {}", e)
+            helpers::keychain_store_error(&e)
         })?;
     log::info!("Successfully stored value for key: {}", key);
     Ok(())
@@ -54,6 +69,15 @@ pub async fn keychain_store(app: AppHandle, key: String, value: String) -> Resul
 pub async fn keychain_retrieve(app: AppHandle, key: String) -> Result<String, String> {
     log::info!("Retrieving value from keychain for key: {}", key);
     
+    // Validate input length
+    helpers::validate_keychain_key(&key)
+        .map_err(|e| {
+            log::warn!("Keychain retrieve validation failed for key: {}", e);
+            e
+        })?;
+    
+    // Clone is necessary: RetrieveRequest requires owned Strings for both service and user fields
+    // We use the same key for both fields, so we clone for service and move key into user
     let request = RetrieveRequest {
         service: key.clone(),
         user: key,
@@ -62,7 +86,7 @@ pub async fn keychain_retrieve(app: AppHandle, key: String) -> Result<String, St
     let response = app.keystore().retrieve(request)
         .map_err(|e| {
             log::error!("Failed to retrieve value from keychain: {}", e);
-            format!("Keychain retrieve failed: {}", e)
+            helpers::keychain_retrieve_error(&e)
         })?;
     
     log::info!("Successfully retrieved value for key");
@@ -83,6 +107,15 @@ pub async fn keychain_retrieve(app: AppHandle, key: String) -> Result<String, St
 pub async fn keychain_remove(app: AppHandle, key: String) -> Result<(), String> {
     log::info!("Removing value from keychain for key: {}", key);
     
+    // Validate input length
+    helpers::validate_keychain_key(&key)
+        .map_err(|e| {
+            log::warn!("Keychain remove validation failed for key: {}", e);
+            e
+        })?;
+    
+    // Clone is necessary: RemoveRequest requires owned Strings for both service and user fields
+    // We use the same key for both fields, so we clone for service and move key into user
     let request = RemoveRequest {
         service: key.clone(),
         user: key,
@@ -91,7 +124,7 @@ pub async fn keychain_remove(app: AppHandle, key: String) -> Result<(), String> 
     app.keystore().remove(request)
         .map_err(|e| {
             log::error!("Failed to remove value from keychain: {}", e);
-            format!("Keychain remove failed: {}", e)
+            helpers::keychain_remove_error(&e)
         })?;
     log::info!("Successfully removed value for key");
     Ok(())
@@ -111,6 +144,15 @@ pub async fn keychain_remove(app: AppHandle, key: String) -> Result<(), String> 
 pub async fn keychain_exists(app: AppHandle, key: String) -> Result<bool, String> {
     log::debug!("Checking if key exists in keychain: {}", key);
     
+    // Validate input length
+    helpers::validate_keychain_key(&key)
+        .map_err(|e| {
+            log::warn!("Keychain exists validation failed for key: {}", e);
+            e
+        })?;
+    
+    // Clone is necessary: RetrieveRequest requires owned Strings for both service and user fields
+    // We use the same key for both fields, so we clone for service and move key into user
     let request = RetrieveRequest {
         service: key.clone(),
         user: key,
@@ -126,4 +168,63 @@ pub async fn keychain_exists(app: AppHandle, key: String) -> Result<bool, String
             Ok(false)
         }
     }
+}
+
+/// Check connectivity to the application server
+///
+/// This command performs a connectivity check with retry logic and exponential backoff.
+/// It attempts to establish a TCP connection to the configured server.
+///
+/// # Returns
+///
+/// Returns `true` if connectivity is available, `false` otherwise.
+/// Returns an error string if an unexpected error occurs.
+///
+/// # Examples
+///
+/// ```javascript
+/// const isConnected = await invoke('check_connectivity');
+/// if (isConnected) {
+///   console.log('Connected to server');
+/// }
+/// ```
+#[tauri::command]
+pub async fn check_connectivity() -> Result<bool, String> {
+    log::info!("Connectivity check requested via command");
+    
+    connectivity::check_connectivity()
+        .await
+        .map_err(|e| {
+            let error_msg = format!("Connectivity check failed: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })
+}
+
+/// Perform a quick connectivity check without retries
+///
+/// This command performs a single connectivity check attempt without retry logic.
+/// It's faster than `check_connectivity` but less reliable.
+///
+/// # Returns
+///
+/// Returns `true` if connectivity is available, `false` otherwise.
+/// Returns an error string if an unexpected error occurs.
+///
+/// # Examples
+///
+/// ```javascript
+/// const isConnected = await invoke('check_connectivity_quick');
+/// ```
+#[tauri::command]
+pub async fn check_connectivity_quick() -> Result<bool, String> {
+    log::info!("Quick connectivity check requested via command");
+    
+    connectivity::check_connectivity_quick()
+        .await
+        .map_err(|e| {
+            let error_msg = format!("Quick connectivity check failed: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })
 }

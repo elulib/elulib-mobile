@@ -123,3 +123,73 @@ fn test_app_builder_includes_invoke_handler() {
     // So if we get here, registration was successful
     assert!(true, "App builder includes invoke_handler with keychain commands");
 }
+
+// ============================================================================
+// Keychain Validation Tests
+// ============================================================================
+
+#[test]
+fn test_validate_keychain_key_valid() {
+    use elulib_mobile::constants::helpers;
+    
+    // Test valid key lengths
+    assert!(helpers::validate_keychain_key("a").is_ok(), "Single character key should be valid");
+    assert!(helpers::validate_keychain_key("valid_key").is_ok(), "Normal key should be valid");
+    
+    // Test maximum length key (256 characters)
+    let max_key = "a".repeat(256);
+    assert!(helpers::validate_keychain_key(&max_key).is_ok(), "Maximum length key should be valid");
+}
+
+#[test]
+fn test_validate_keychain_key_too_short() {
+    use elulib_mobile::constants::helpers;
+    
+    // Test empty key (below minimum)
+    let result = helpers::validate_keychain_key("");
+    assert!(result.is_err(), "Empty key should be invalid");
+    let error_msg = result.unwrap_err();
+    assert!(error_msg.contains("at least"), "Error message should mention minimum length");
+    assert!(error_msg.contains("1"), "Error message should mention minimum value of 1");
+}
+
+#[test]
+fn test_validate_keychain_key_too_long() {
+    use elulib_mobile::constants::helpers;
+    
+    // Test key exceeding maximum length (257 characters)
+    let too_long_key = "a".repeat(257);
+    let result = helpers::validate_keychain_key(&too_long_key);
+    assert!(result.is_err(), "Key exceeding maximum length should be invalid");
+    let error_msg = result.unwrap_err();
+    assert!(error_msg.contains("at most"), "Error message should mention maximum length");
+    assert!(error_msg.contains("256"), "Error message should mention maximum value of 256");
+    assert!(error_msg.contains("257"), "Error message should mention actual length");
+}
+
+#[test]
+fn test_validate_keychain_value_valid() {
+    use elulib_mobile::constants::helpers;
+    
+    // Test valid value lengths
+    assert!(helpers::validate_keychain_value("").is_ok(), "Empty value should be valid");
+    assert!(helpers::validate_keychain_value("valid_value").is_ok(), "Normal value should be valid");
+    
+    // Test maximum length value (4096 characters)
+    let max_value = "a".repeat(4096);
+    assert!(helpers::validate_keychain_value(&max_value).is_ok(), "Maximum length value should be valid");
+}
+
+#[test]
+fn test_validate_keychain_value_too_long() {
+    use elulib_mobile::constants::helpers;
+    
+    // Test value exceeding maximum length (4097 characters)
+    let too_long_value = "a".repeat(4097);
+    let result = helpers::validate_keychain_value(&too_long_value);
+    assert!(result.is_err(), "Value exceeding maximum length should be invalid");
+    let error_msg = result.unwrap_err();
+    assert!(error_msg.contains("at most"), "Error message should mention maximum length");
+    assert!(error_msg.contains("4096"), "Error message should mention maximum value of 4096");
+    assert!(error_msg.contains("4097"), "Error message should mention actual length");
+}

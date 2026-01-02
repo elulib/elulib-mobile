@@ -18,6 +18,8 @@ log = "0.4"
 tauri-plugin-log = "2.1"
 # Keychain/secure storage plugin for iOS Keychain and Android Keystore
 tauri-plugin-keystore = { version = "2.1.0-alpha.1", default-features = false }
+# Async runtime for connectivity checks
+tokio = { version = "1", features = ["net", "time", "rt"] }
 
 [dev-dependencies]
 # Testing dependencies
