@@ -1,6 +1,6 @@
 # elulib-mobile
 
-[![Tests](https://github.com/elulib/elulib-mobile/actions/workflows/tests.yaml/badge.svg)](https://github.com/elulib/elulib-mobile/actions/workflows/tests.yaml)
+[![Test](https://github.com/elulib/elulib-mobile/actions/workflows/test.yaml/badge.svg)](https://github.com/elulib/elulib-mobile/actions/workflows/test.yaml)
 
 ## Installation
 
