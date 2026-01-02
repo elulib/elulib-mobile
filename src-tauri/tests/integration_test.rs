@@ -171,3 +171,4 @@ fn test_keystore_concurrent_access() {
     //
     assert!(true, "Keystore concurrent access test placeholder - requires runtime");
 }
+

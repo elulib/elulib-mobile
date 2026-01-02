@@ -52,6 +52,12 @@ pub mod constants;
 /// Connectivity check module
 pub mod connectivity;
 
+/// Notification bridge module
+pub mod notification_bridge;
+
+/// Platform-specific notifications module
+pub mod notifications;
+
 /// Builds and returns a configured Tauri application builder
 ///
 /// This function creates a Tauri application builder that can be
@@ -138,6 +144,10 @@ pub fn run() -> AppResult<()> {
             commands::keychain_exists,
             commands::check_connectivity,
             commands::check_connectivity_quick,
+            notification_bridge::show_notification,
+            notification_bridge::request_notification_permission,
+            notification_bridge::check_notification_permission,
+            notification_bridge::is_notification_supported,
         ])
         .setup(|_app| {
             log::debug!("Setting up application");
@@ -148,8 +158,15 @@ pub fn run() -> AppResult<()> {
             {
                 log::debug!("Debug mode enabled");
                 // Enable devtools in debug mode if needed
-                // _app.handle().plugin(tauri_plugin_devtools::init())?;
+                // app.handle().plugin(tauri_plugin_devtools::init())?;
             }
+            
+            // Note: For remote frontends, the notification bridge script should be
+            // injected by the frontend itself or via a content script.
+            // The JavaScript bridge file is available at src-tauri/notification-bridge.js
+            // and should be loaded by the remote frontend or injected via Tauri's
+            // content script mechanism if available.
+            log::info!("Notification bridge module loaded - frontend should inject bridge script");
             
             // Perform connectivity check at startup (non-blocking)
             tauri::async_runtime::spawn(async move {
