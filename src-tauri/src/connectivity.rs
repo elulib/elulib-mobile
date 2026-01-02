@@ -184,5 +184,59 @@ mod tests {
         // Result will be Ok(true) on success or Err(ConnectivityError) on failure
         assert!(matches!(result, Ok(_) | Err(_)));
     }
+    
+    #[tokio::test]
+    async fn test_check_connectivity_once_return_types() {
+        // Verify that check_connectivity_once only returns Ok(true) or Err
+        // It should never return Ok(false)
+        let result = check_connectivity_once().await;
+        
+        match result {
+            Ok(true) => {
+                // Success case - this is valid
+            }
+            Ok(false) => {
+                panic!("check_connectivity_once should never return Ok(false)");
+            }
+            Err(ConnectivityError::Timeout) => {
+                // Timeout is a valid error
+            }
+            Err(ConnectivityError::Io(_)) => {
+                // I/O error is valid
+            }
+            Err(ConnectivityError::MaxRetriesExceeded) => {
+                // This shouldn't happen in check_connectivity_once, but it's a valid error type
+            }
+        }
+    }
+    
+    #[tokio::test]
+    async fn test_check_connectivity_quick() {
+        // Test that check_connectivity_quick returns a valid result
+        let result = check_connectivity_quick().await;
+        assert!(matches!(result, Ok(_) | Err(_)), "check_connectivity_quick should return Ok or Err");
+        
+        // Verify it returns Ok(true) on success, not Ok(false)
+        if let Ok(connected) = result {
+            assert_eq!(connected, true, "check_connectivity_quick should only return Ok(true) on success");
+        }
+    }
+    
+    #[test]
+    fn test_connectivity_result_type() {
+        // Test that ConnectivityResult is properly defined
+        let success: ConnectivityResult = Ok(true);
+        assert!(success.is_ok());
+        assert_eq!(success.unwrap(), true);
+        
+        let timeout_error: ConnectivityResult = Err(ConnectivityError::Timeout);
+        assert!(timeout_error.is_err());
+        
+        if let Err(ConnectivityError::Timeout) = timeout_error {
+            // Correct error type
+        } else {
+            panic!("Should be ConnectivityError::Timeout");
+        }
+    }
 }
 
